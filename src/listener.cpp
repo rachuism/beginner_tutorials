@@ -12,9 +12,9 @@ ros::Publisher height_pub;
  */
 void chatterCallback(const std_msgs::String::ConstPtr& msg)
 {
-  std_msgs::String name;
-  std_msgs::String age;
-  std_msgs::String height;
+  string name;
+  string age;
+  string height;
 
   //std_msgs::Int32 count1;
   //std_msgs::Int32 count2;
@@ -24,9 +24,13 @@ int count2;
 int len;
 int flag =0;
 
-  std::string line;
+std_msgs::String msg_name;
+std_msgs::String msg_age;
+std_msgs::String msg_height;
 
-  //cout << msg->data <<endl;
+std::string line;
+
+ //cout << msg->data <<endl;
 /*
   line = msg->data.substr(3,5);
   cout << line << endl;
@@ -61,6 +65,12 @@ int flag =0;
 
 		}
 }
+  msg_name.data = name;
+  msg_age.data  = age;
+  msg_height.data = height;
+  name_pub.publish(msg_name);
+  age_pub.publish(msg_age);
+  height_pub.publish(msg_height);
 
 }
 
@@ -139,13 +149,19 @@ int main(int argc, char **argv)
   ros::Subscriber sub = n.subscribe("chatter", 1000, chatterCallback);
 
   name_pub = n.advertise<std_msgs::String>("name", 1000); //añadir 3 de estos
-  age_pub = n.advertise<std_msgs::Int
+  age_pub = n.advertise<std_msgs::String>("age", 1000);
+  height_pub = n.advertise<std_msgs::String>("height", 1000);
+  ros::Rate loop_rate(0.5);
+
+
+  //age_pub = n.advertise<std_msgs::Int
 
   /**
    * ros::spin() will enter a loop, pumping callbacks.  With this version, all
    * callbacks will be called from within this thread (the main one).  ros::spin()
    * will exit when Ctrl-C is pressed, or the node is shutdown by the master.
    */
+
   ros::spin();
 
   return 0;
